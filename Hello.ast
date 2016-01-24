@@ -1,2 +1,8 @@
-variable integer Hello
-set Hello=1 000 000
+;Создать новую строковую переменную
+variable string Hello
+
+;Присвоить значение переменной
+set Hello=Hello, World!
+
+;Вывести переменную на экран
+println Hello
