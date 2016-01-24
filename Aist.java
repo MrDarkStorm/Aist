@@ -9,6 +9,8 @@ import java.math.*;
 
 public class Aist{
 	
+	static int line_num;
+	
 	//Список значений строковых переменных
 	static List<String> String_Variables = new ArrayList<String>();
 	//Список имён строковых переменных
@@ -24,6 +26,60 @@ public class Aist{
 	
 	//Операторы Aist
 	static final String[] Aist_opeators = new String[]{"var","variable","int","integer","str","string","real"};
+	
+	//Отпарсить строку
+	static String Aist_ParseString(String s){
+		String RetString = "";
+		for(int i=0;i<s.length();i++){
+			//Escape последовательности
+			if(s.charAt(i)=='\\'){
+				i++;
+				if(i==s.length()){
+					System.out.println("EscapeSequenceError: Met by the end of the string, but expected control character Escape sequence. Line "
+						+Integer.toString(line_num+1));
+						System.exit(1);
+				}
+				if(s.charAt(i)=='\\'){
+					RetString += s.charAt(i);
+				}
+				else if(s.charAt(i)=='n'){
+					RetString += "\n";
+				}
+				else{
+					System.out.println("EscapeSequenceError: Unknown Escape sequence. Line "
+						+Integer.toString(line_num+1));
+						System.exit(1);
+				}
+			}else{
+				RetString += s.charAt(i);
+			}
+		}
+		return RetString;
+	}
+	
+	static int Aist_ParseInteger(String s){
+		int Rets = 0;
+		try{
+			Rets = Integer.parseInt(s.replaceAll(" ",""));
+		}catch(Exception e){
+			System.out.println("TypeError: This object is not a number - \'"+s+"\'. Line "
+						+Integer.toString(line_num+1));
+						System.exit(1);
+		}
+		return Rets;
+	}
+	
+	static double Aist_ParseReal(String s){
+		double Rets = 0;
+		try{
+			Rets = Double.parseDouble(s.replaceAll(" ","").replace(',','.'));
+		}catch(Exception e){
+			System.out.println("TypeError: This object is not a number - \'"+s+"\'. Line "
+						+Integer.toString(line_num+1));
+						System.exit(1);
+		}
+		return Rets;
+	}
 	
     public static void main(String[] args){
 		//Проверяем правильность количества параметров
@@ -56,7 +112,7 @@ public class Aist{
 		}
 		
 		//Реализация интерпретации комманд
-		for(int line_num=0;line_num<Lines.size();line_num++){
+		for(line_num=0;line_num<Lines.size();line_num++){
 			if(Lines.get(line_num).charAt(0)==';'||Lines.get(line_num).trim()=="") continue;
 			
 			//Создание новой переменной============================== +
@@ -69,7 +125,7 @@ public class Aist{
 					System.out.println("ParameterError: Too few parameters. Line "+Integer.toString(line_num+1));
 					System.exit(1);
 				}
-				//Проверить, твует ли уже такая переменная
+				//Проверить, существует ли уже такая переменная
 				if(String_Names.contains(Lines.get(line_num).split("\\s+")[2])||Int_Names.contains(Lines.get(line_num).split("\\s+")[2])||
 					Real_Names.contains(Lines.get(line_num).split("\\s+")[2])){
 						System.out.println("NameError: The object named \'"+Lines.get(line_num).split("\\s+")[2]
@@ -105,6 +161,55 @@ public class Aist{
 				}
 			}
 			//=======================================================
+			
+			
+			
+			
+			//Установить значение переменной
+			else if(Lines.get(line_num).split("\\s+")[0].equals("set")){
+				if(!Lines.get(line_num).contains("=")){
+					System.out.println("SyntaxError: The symbol '=' must be in SET. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				String First_Part = Lines.get(line_num).split("=")[0].trim();
+				if(First_Part.split("\\s+").length!=2){
+					System.out.println("ParameterError: SET must contain a variable name. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				String Var_Name = First_Part.split("\\s+")[1];
+				//Проверить существует ли переменная
+				if(!String_Names.contains(Var_Name)&&!Int_Names.contains(Var_Name)&&
+					!Real_Names.contains(Var_Name)){
+						System.out.println("NameError: Variable does not exist - \'"+Var_Name
+							+"\'. Line "+Integer.toString(line_num+1));
+						System.exit(1);
+					}
+				String Set_Value = Lines.get(line_num).substring(Lines.get(line_num).indexOf('=')+1,Lines.get(line_num).length());
+				//Присваивание значения строковой переменной
+				if(String_Names.contains(Var_Name)){
+					String Set_String = Aist_ParseString(Set_Value);
+					String_Variables.set(String_Names.indexOf(Var_Name),Set_String);
+				}
+				//Присваивание значения целочисленной переменной
+				else if(Int_Names.contains(Var_Name)){
+					int Set_Int = Aist_ParseInteger(Set_Value);
+					Int_Variables.set(Int_Names.indexOf(Var_Name),Set_Int);
+				}
+				//Присваивание значения дроби
+				else if(Real_Names.contains(Var_Name)){
+					double Set_Real = Aist_ParseReal(Set_Value);
+					Real_Variables.set(Real_Names.indexOf(Var_Name),Set_Real);
+				}
+			}
+			
+			
+			
+			//Если имя функции неправильное, то...
+			else{
+				System.out.println("SyntaxError: Unknown function - \'"+Lines.get(line_num).split("\\s+")[0]+"\'. Line "+Integer.toString(line_num+1));
+				System.exit(1);
+			}
+			//==============================
 		}
     }
 }

@@ -1,1 +1,2 @@
-variable string Hello
+variable integer Hello
+set Hello=1 000 000
