@@ -25,7 +25,7 @@ public class Aist{
 	static List<String> Real_Names = new ArrayList<String>();
 	
 	//Операторы Aist
-	static final String[] Aist_opeators = new String[]{"var","variable","int","integer","str","string","real","set"};
+	static final String[] Aist_opeators = new String[]{"var","variable","int","integer","str","string","real","set","print","println"};
 	
 	//Отпарсить строку
 	static String Aist_ParseString(String s){
