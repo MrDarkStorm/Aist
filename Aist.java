@@ -25,7 +25,7 @@ public class Aist{
 	static List<String> Real_Names = new ArrayList<String>();
 	
 	//Операторы Aist
-	static final String[] Aist_opeators = new String[]{"var","variable","int","integer","str","string","real"};
+	static final String[] Aist_opeators = new String[]{"var","variable","int","integer","str","string","real","set"};
 	
 	//Отпарсить строку
 	static String Aist_ParseString(String s){
@@ -139,6 +139,11 @@ public class Aist{
 							+"\' is reserved by the interpreter. Line "+Integer.toString(line_num+1));
 						System.exit(1);
 					}
+				}
+				if(Lines.get(line_num).contains("=")){
+					System.out.println("NameError: Wrong name of variable - \'"+Lines.get(line_num).split("\\s+")[2]
+							+"\'. Line "+Integer.toString(line_num+1));
+						System.exit(1);
 				}
 				//Создать новую строковую переменную
 				if(Lines.get(line_num).split("\\s+")[1].equals("str")||Lines.get(line_num).split("\\s+")[1].equals("string")){
