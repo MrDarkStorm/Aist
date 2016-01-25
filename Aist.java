@@ -263,6 +263,50 @@ public class Aist{
 			
 			
 			
+			//Оператор ввода - scan
+			else if(Lines.get(line_num).split("\\s+")[0].equals("scan")){
+				if(Lines.get(line_num).split("\\s+").length<1){
+					System.out.println("ParameterError: Too few parameters. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				//Проверить существует ли переменная
+				if(!String_Names.contains(Lines.get(line_num).split("\\s+")[1])&&!Int_Names.contains(Lines.get(line_num).split("\\s+")[1])&&
+					!Real_Names.contains(Lines.get(line_num).split("\\s+")[1])){
+						System.out.println("NameError: Variable does not exist - \'"+Lines.get(line_num).split("\\s+")[1]
+							+"\'. Line "+Integer.toString(line_num+1));
+						System.exit(1);
+					}
+				Scanner in = new Scanner(System.in);
+				//Обработка ввода для каждого типа
+				for(int i=1;i<Lines.get(line_num).split("\\s+").length;i++){	
+					if(String_Names.contains(Lines.get(line_num).split("\\s+")[i])){
+						String input_str = in.nextLine();
+						String_Variables.set(String_Names.indexOf(Lines.get(line_num).split("\\s+")[i]),input_str);
+					}
+					else if(Int_Names.contains(Lines.get(line_num).split("\\s+")[i])){
+						try{
+							int input_int = in.nextInt();
+							Int_Variables.set(Int_Names.indexOf(Lines.get(line_num).split("\\s+")[i]),input_int);
+						}catch(Exception e){
+							System.out.println("ScanError: The input data type does not match int"
+							+". Line "+Integer.toString(line_num+1));
+							System.exit(1);
+						}
+					}
+					else if(Real_Names.contains(Lines.get(line_num).split("\\s+")[i])){
+						try{
+							double input_real = in.nextDouble();
+							Real_Variables.set(Real_Names.indexOf(Lines.get(line_num).split("\\s+")[i]),input_real);
+						}catch(Exception e){
+							System.out.println("ScanError: The input data type does not match real"
+							+". Line "+Integer.toString(line_num+1));
+							System.exit(1);
+						}
+					}
+				}
+			}
+			
+			
 			//Если имя функции неправильное, то...
 			else{
 				System.out.println("SyntaxError: Unknown function - \'"+Lines.get(line_num).split("\\s+")[0]+"\'. Line "+Integer.toString(line_num+1));
