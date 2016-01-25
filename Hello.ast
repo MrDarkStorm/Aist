@@ -2,13 +2,10 @@
 variable string Hello
 
 ;Присвоить значение переменной
-set Hello=Привет, 
+set Hello=Привет, мир
 
-;Создать новую строковую переменную
-variable str Name
+;Вывести Hello на экран
+print Hello
 
-;Отсканировать значение
-scan Name
-
-;Вывести переменную на экран
-println Hello Name
+;Задержка до нажатия Enter
+scan

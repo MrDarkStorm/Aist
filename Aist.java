@@ -23,6 +23,10 @@ public class Aist{
 	static List<Double> Real_Variables = new ArrayList<Double>();
 	//Список имён дробных переменных
 	static List<String> Real_Names = new ArrayList<String>();
+	//Список значений булевых переменных
+	static List<Boolean> Bool_Variables = new ArrayList<Boolean>();
+	//Список имён булевых переменных
+	static List<String> Bool_Names = new ArrayList<String>();
 	
 	//Операторы Aist
 	static final String[] Aist_opeators = new String[]{"var","variable","int","integer","str","string","real","set","print","println"};
@@ -77,6 +81,17 @@ public class Aist{
 			System.out.println("TypeError: This object is not a number - \'"+s+"\'. Line "
 						+Integer.toString(line_num+1));
 						System.exit(1);
+		}
+		return Rets;
+	}
+	
+	static boolean Aist_ParseBool(String s){
+		boolean Rets = true;
+		if(s.trim().equals("")||s.trim().equals("false")||s.trim().equals("0")){
+			Rets = false;
+		}
+		if(!s.trim().equals("")&&!s.trim().equals("false")&&!s.trim().equals("0")){
+			Rets = true;
 		}
 		return Rets;
 	}
@@ -160,6 +175,10 @@ public class Aist{
 				else if(Lines.get(line_num).split("\\s+")[1].equals("real")){
 					Real_Names.add(Lines.get(line_num).split("\\s+")[2]);
 					Real_Variables.add(0.0);
+				}
+				else if(Lines.get(line_num).split("\\s+")[1].equals("bool")||Lines.get(line_num).split("\\s+")[1].equals("boolean")){
+					Bool_Names.add(Lines.get(line_num).split("\\s+")[2]);
+					Bool_Variables.add(false);
 				//Ошибка "Неизвестный тип данных"
 				}else{
 					System.out.println("TypeError: Unknown data type \'"+Lines.get(line_num).split("\\s+")[1]+"\'. Line "+Integer.toString(line_num+1));
@@ -206,6 +225,10 @@ public class Aist{
 					double Set_Real = Aist_ParseReal(Set_Value);
 					Real_Variables.set(Real_Names.indexOf(Var_Name),Set_Real);
 				}
+				else if(Bool_Names.contains(Var_Name)){
+					boolean Set_Bool = Aist_ParseBool(Set_Value);
+					Bool_Variables.set(Bool_Names.indexOf(Var_Name),Set_Bool);
+				}
 			}
 			
 			//Оператор вывода - print
@@ -214,14 +237,16 @@ public class Aist{
 					System.out.println("ParameterError: Too few parameters. Line "+Integer.toString(line_num+1));
 					System.exit(1);
 				}
-				//Проверить существует ли переменная
-				if(!String_Names.contains(Lines.get(line_num).split("\\s+")[1])&&!Int_Names.contains(Lines.get(line_num).split("\\s+")[1])&&
-					!Real_Names.contains(Lines.get(line_num).split("\\s+")[1])){
-						System.out.println("NameError: Variable does not exist - \'"+Lines.get(line_num).split("\\s+")[1]
+				
+				for(int i=1;i<Lines.get(line_num).split("\\s+").length;i++){	
+					//Проверить существует ли переменная
+					if(!String_Names.contains(Lines.get(line_num).split("\\s+")[i])&&!Int_Names.contains(Lines.get(line_num).split("\\s+")[i])&&
+					!Real_Names.contains(Lines.get(line_num).split("\\s+")[i])){
+						System.out.println("NameError: Variable does not exist - \'"+Lines.get(line_num).split("\\s+")[i]
 							+"\'. Line "+Integer.toString(line_num+1));
 						System.exit(1);
 					}
-				for(int i=1;i<Lines.get(line_num).split("\\s+").length;i++){	
+					
 					if(String_Names.contains(Lines.get(line_num).split("\\s+")[i])){
 						System.out.print(String_Variables.get(String_Names.indexOf(Lines.get(line_num).split("\\s+")[i])));
 					}
@@ -230,6 +255,9 @@ public class Aist{
 					}
 					else if(Real_Names.contains(Lines.get(line_num).split("\\s+")[i])){
 						System.out.print(Real_Variables.get(Real_Names.indexOf(Lines.get(line_num).split("\\s+")[i])));
+					}
+					else if(Bool_Names.contains(Lines.get(line_num).split("\\s+")[i])){
+						System.out.print(Bool_Variables.get(Bool_Names.indexOf(Lines.get(line_num).split("\\s+")[i])));
 					}
 				}
 			}
@@ -248,6 +276,14 @@ public class Aist{
 						System.exit(1);
 					}
 				for(int i=1;i<Lines.get(line_num).split("\\s+").length;i++){	
+					//Проверить существует ли переменная
+					if(!String_Names.contains(Lines.get(line_num).split("\\s+")[i])&&!Int_Names.contains(Lines.get(line_num).split("\\s+")[i])&&
+					!Real_Names.contains(Lines.get(line_num).split("\\s+")[i])){
+						System.out.println("NameError: Variable does not exist - \'"+Lines.get(line_num).split("\\s+")[i]
+							+"\'. Line "+Integer.toString(line_num+1));
+						System.exit(1);
+					}
+					
 					if(String_Names.contains(Lines.get(line_num).split("\\s+")[i])){
 						System.out.print(String_Variables.get(String_Names.indexOf(Lines.get(line_num).split("\\s+")[i])));
 					}
@@ -257,6 +293,9 @@ public class Aist{
 					else if(Real_Names.contains(Lines.get(line_num).split("\\s+")[i])){
 						System.out.print(Real_Variables.get(Real_Names.indexOf(Lines.get(line_num).split("\\s+")[i])));
 					}
+					else if(Bool_Names.contains(Lines.get(line_num).split("\\s+")[i])){
+						System.out.print(Bool_Variables.get(Bool_Names.indexOf(Lines.get(line_num).split("\\s+")[i])));
+					}
 				}
 				System.out.println();
 			}
@@ -265,9 +304,12 @@ public class Aist{
 			
 			//Оператор ввода - scan
 			else if(Lines.get(line_num).split("\\s+")[0].equals("scan")){
-				if(Lines.get(line_num).split("\\s+").length<1){
-					System.out.println("ParameterError: Too few parameters. Line "+Integer.toString(line_num+1));
-					System.exit(1);
+				Scanner in = new Scanner(System.in);
+				
+				//scan без параметров - задержка до нажатия Enter
+				if(Lines.get(line_num).split("\\s+").length==1){
+					in.nextLine();
+					continue;
 				}
 				//Проверить существует ли переменная
 				if(!String_Names.contains(Lines.get(line_num).split("\\s+")[1])&&!Int_Names.contains(Lines.get(line_num).split("\\s+")[1])&&
@@ -276,7 +318,7 @@ public class Aist{
 							+"\'. Line "+Integer.toString(line_num+1));
 						System.exit(1);
 					}
-				Scanner in = new Scanner(System.in);
+				
 				//Обработка ввода для каждого типа
 				for(int i=1;i<Lines.get(line_num).split("\\s+").length;i++){	
 					if(String_Names.contains(Lines.get(line_num).split("\\s+")[i])){
@@ -302,6 +344,48 @@ public class Aist{
 							+". Line "+Integer.toString(line_num+1));
 							System.exit(1);
 						}
+					}
+					else if(Bool_Names.contains(Lines.get(line_num).split("\\s+")[i])){
+						String input_str = in.nextLine();
+						Bool_Variables.set(Bool_Names.indexOf(Lines.get(line_num).split("\\s+")[i]),Aist_ParseBool(input_str));
+					}
+				}
+			}
+			
+			//Удалить переменную из памяти - destroy
+			else if(Lines.get(line_num).split("\\s+")[0].equals("destroy")){
+				if(Lines.get(line_num).split("\\s+").length<1){
+					System.out.println("ParameterError: Too few parameters. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				
+				for(int i=1;i<Lines.get(line_num).split("\\s+").length;i++){
+					//Проверить существует ли переменная
+					if(!String_Names.contains(Lines.get(line_num).split("\\s+")[i])&&!Int_Names.contains(Lines.get(line_num).split("\\s+")[i])&&
+					!Real_Names.contains(Lines.get(line_num).split("\\s+")[i])){
+						System.out.println("NameError: Variable does not exist - \'"+Lines.get(line_num).split("\\s+")[i]
+							+"\'. Line "+Integer.toString(line_num+1));
+						System.exit(1);
+					}
+					if(String_Names.contains(Lines.get(line_num).split("\\s+")[i])){
+						int index_Of = String_Names.indexOf(Lines.get(line_num).split("\\s+")[i]);
+						String_Names.remove(index_Of);
+						String_Variables.remove(index_Of);
+					}
+					else if(Int_Names.contains(Lines.get(line_num).split("\\s+")[i])){
+						int index_Of = Int_Names.indexOf(Lines.get(line_num).split("\\s+")[i]);
+						Int_Names.remove(index_Of);
+						Int_Variables.remove(index_Of);
+					}
+					else if(Real_Names.contains(Lines.get(line_num).split("\\s+")[i])){
+						int index_Of = Real_Names.indexOf(Lines.get(line_num).split("\\s+")[i]);
+						Real_Names.remove(index_Of);
+						Real_Variables.remove(index_Of);
+					}
+					else if(Bool_Names.contains(Lines.get(line_num).split("\\s+")[i])){
+						int index_Of = Bool_Names.indexOf(Lines.get(line_num).split("\\s+")[i]);
+						Bool_Names.remove(index_Of);
+						Bool_Variables.remove(index_Of);
 					}
 				}
 			}
