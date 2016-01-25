@@ -204,7 +204,7 @@ public class Aist{
 				String Var_Name = First_Part.split("\\s+")[1];
 				//Проверить существует ли переменная
 				if(!String_Names.contains(Var_Name)&&!Int_Names.contains(Var_Name)&&
-					!Real_Names.contains(Var_Name)){
+					!Real_Names.contains(Var_Name)&&!Bool_Names.contains(Var_Name)){
 						System.out.println("NameError: Variable does not exist - \'"+Var_Name
 							+"\'. Line "+Integer.toString(line_num+1));
 						System.exit(1);
@@ -241,7 +241,7 @@ public class Aist{
 				for(int i=1;i<Lines.get(line_num).split("\\s+").length;i++){	
 					//Проверить существует ли переменная
 					if(!String_Names.contains(Lines.get(line_num).split("\\s+")[i])&&!Int_Names.contains(Lines.get(line_num).split("\\s+")[i])&&
-					!Real_Names.contains(Lines.get(line_num).split("\\s+")[i])){
+					!Real_Names.contains(Lines.get(line_num).split("\\s+")[i])&&!Bool_Names.contains(Lines.get(line_num).split("\\s+")[i])){
 						System.out.println("NameError: Variable does not exist - \'"+Lines.get(line_num).split("\\s+")[i]
 							+"\'. Line "+Integer.toString(line_num+1));
 						System.exit(1);
@@ -268,17 +268,10 @@ public class Aist{
 					System.out.println("ParameterError: Too few parameters. Line "+Integer.toString(line_num+1));
 					System.exit(1);
 				}
-				//Проверить существует ли переменная
-				if(!String_Names.contains(Lines.get(line_num).split("\\s+")[1])&&!Int_Names.contains(Lines.get(line_num).split("\\s+")[1])&&
-					!Real_Names.contains(Lines.get(line_num).split("\\s+")[1])){
-						System.out.println("NameError: Variable does not exist - \'"+Lines.get(line_num).split("\\s+")[1]
-							+"\'. Line "+Integer.toString(line_num+1));
-						System.exit(1);
-					}
 				for(int i=1;i<Lines.get(line_num).split("\\s+").length;i++){	
 					//Проверить существует ли переменная
 					if(!String_Names.contains(Lines.get(line_num).split("\\s+")[i])&&!Int_Names.contains(Lines.get(line_num).split("\\s+")[i])&&
-					!Real_Names.contains(Lines.get(line_num).split("\\s+")[i])){
+					!Real_Names.contains(Lines.get(line_num).split("\\s+")[i])&&!Bool_Names.contains(Lines.get(line_num).split("\\s+")[i])){
 						System.out.println("NameError: Variable does not exist - \'"+Lines.get(line_num).split("\\s+")[i]
 							+"\'. Line "+Integer.toString(line_num+1));
 						System.exit(1);
@@ -311,16 +304,16 @@ public class Aist{
 					in.nextLine();
 					continue;
 				}
-				//Проверить существует ли переменная
-				if(!String_Names.contains(Lines.get(line_num).split("\\s+")[1])&&!Int_Names.contains(Lines.get(line_num).split("\\s+")[1])&&
-					!Real_Names.contains(Lines.get(line_num).split("\\s+")[1])){
+				
+				//Обработка ввода для каждого типа
+				for(int i=1;i<Lines.get(line_num).split("\\s+").length;i++){
+					//Проверить существует ли переменная
+					if(!String_Names.contains(Lines.get(line_num).split("\\s+")[i])&&!Int_Names.contains(Lines.get(line_num).split("\\s+")[i])&&
+					!Real_Names.contains(Lines.get(line_num).split("\\s+")[i])&&!Bool_Names.contains(Lines.get(line_num).split("\\s+")[i])){
 						System.out.println("NameError: Variable does not exist - \'"+Lines.get(line_num).split("\\s+")[1]
 							+"\'. Line "+Integer.toString(line_num+1));
 						System.exit(1);
 					}
-				
-				//Обработка ввода для каждого типа
-				for(int i=1;i<Lines.get(line_num).split("\\s+").length;i++){	
 					if(String_Names.contains(Lines.get(line_num).split("\\s+")[i])){
 						String input_str = in.nextLine();
 						String_Variables.set(String_Names.indexOf(Lines.get(line_num).split("\\s+")[i]),input_str);
@@ -362,7 +355,7 @@ public class Aist{
 				for(int i=1;i<Lines.get(line_num).split("\\s+").length;i++){
 					//Проверить существует ли переменная
 					if(!String_Names.contains(Lines.get(line_num).split("\\s+")[i])&&!Int_Names.contains(Lines.get(line_num).split("\\s+")[i])&&
-					!Real_Names.contains(Lines.get(line_num).split("\\s+")[i])){
+					!Real_Names.contains(Lines.get(line_num).split("\\s+")[i])&&!Bool_Names.contains(Lines.get(line_num).split("\\s+")[i])){
 						System.out.println("NameError: Variable does not exist - \'"+Lines.get(line_num).split("\\s+")[i]
 							+"\'. Line "+Integer.toString(line_num+1));
 						System.exit(1);

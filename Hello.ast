@@ -1,11 +1,9 @@
 ;Создать новую строковую переменную
-variable string Hello
+variable bool Hello
 
 ;Присвоить значение переменной
-set Hello=Привет, мир
+set Hello=false
 
-;Вывести Hello на экран
 print Hello
 
-;Задержка до нажатия Enter
 scan
