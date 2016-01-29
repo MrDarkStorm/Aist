@@ -1,0 +1,6 @@
+String
+Integer
+Real
+
+Нужны ещё:
+Boolean

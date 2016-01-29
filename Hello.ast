@@ -1,0 +1,5 @@
+variable int Hello
+set Hello=2
+add Hello:Hello Hello
+print Hello
+scan
