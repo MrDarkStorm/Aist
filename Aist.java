@@ -550,7 +550,265 @@ public class Aist{
 						Real_Variables.set(Real_Names.indexOf(First_Part.split("\\s+")[1]),Real_Result);
 					}
 				}
+			}
 			//=======================================================================================
+			//======================================================Функция mul(*)======================
+			else if(Lines.get(line_num).split("\\s+")[0].equals("mul")||Lines.get(line_num).split("\\s+")[0].equals("*")){
+				if(!Lines.get(line_num).contains(":")){
+					System.out.println("SyntaxError: The symbol ':' must be in MUL. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				String First_Part = Lines.get(line_num).split(":")[0];
+				String Second_Part = Lines.get(line_num).split(":")[1];
+				if(First_Part.split("\\s+").length!=2){
+					System.out.println("SyntaxError: The add function should return a value of some single variable. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				
+					
+				if(Second_Part.split("\\s+").length<2){
+					System.out.println("ParameterError: The function must take at least two variables. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				//Существует ли переменная
+				if(!String_Names.contains(First_Part.split("\\s+")[1])&&!Int_Names.contains(First_Part.split("\\s+")[1])&&
+				!Real_Names.contains(First_Part.split("\\s+")[1])&&!Bool_Names.contains(First_Part.split("\\s+")[1])){
+					System.out.println("NameError: Variable does not exist - \'"+First_Part.split("\\s+")[1]
+						+"\'. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				//Является ли она булевой
+				if(Bool_Names.contains(First_Part.split("\\s+")[1])){
+					System.out.println("TypeError: The MUL operation is not applicable to Boolean variables. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				//Является ли она строковой
+				if(String_Names.contains(First_Part.split("\\s+")[1])){
+					System.out.println("TypeError: The MUL operation is not applicable to String variables. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				String All_Type = "";
+				int Int_Result = 0;
+				double Real_Result = 0.0;
+				if(Int_Names.contains(First_Part.split("\\s+")[1])){
+					All_Type = "int";
+					Int_Result = Int_Variables.get(Int_Names.indexOf(Second_Part.split("\\s+")[0]));
+				}else if(Real_Names.contains(First_Part.split("\\s+")[1])){
+					All_Type = "real";
+					Real_Result = Real_Variables.get(Real_Names.indexOf(Second_Part.split("\\s+")[0]));
+				}
+				
+				for(int i=1;i<Second_Part.split("\\s+").length;i++){
+					String Cur_Type = "";
+					if(Int_Names.contains(Second_Part.split("\\s+")[i])){
+						Cur_Type = "int";
+					}else if(Real_Names.contains(Second_Part.split("\\s+")[i])){
+						Cur_Type = "real";
+					}else{
+						if(Bool_Names.contains(Second_Part.split("\\s+")[i])){
+							System.out.println("TypeError: The SUB operation is not applicable to Boolean variables. Line "+Integer.toString(line_num+1));
+							System.exit(1);
+						}
+						else if(String_Names.contains(Second_Part.split("\\s+")[i])){
+							System.out.println("TypeError: The SUB operation is not applicable to String variables. Line "+Integer.toString(line_num+1));
+							System.exit(1);
+						}else{
+							System.out.println("NameError: Variable does not exist - \'"+Second_Part.split("\\s+")[i]
+							+"\'. Line "+Integer.toString(line_num+1));
+							System.exit(1);
+						}
+					}
+					if(!All_Type.equals(Cur_Type)){
+						System.out.println("TypeError: Incompatible data types. Line "+Integer.toString(line_num+1));
+						System.exit(1);
+					}
+					if(All_Type.equals("int")){
+						Int_Result *= Int_Variables.get(Int_Names.indexOf(Second_Part.split("\\s+")[i]));
+					}else if(All_Type.equals("real")){
+						Real_Result *= Real_Variables.get(Real_Names.indexOf(Second_Part.split("\\s+")[i]));
+					}
+				}
+				if(!First_Part.split("\\s+")[1].equals("nil")){
+					if(All_Type.equals("int")){
+						Int_Variables.set(Int_Names.indexOf(First_Part.split("\\s+")[1]),Int_Result);
+					}else if(All_Type.equals("real")){
+						Real_Variables.set(Real_Names.indexOf(First_Part.split("\\s+")[1]),Real_Result);
+					}
+				}
+			}
+			
+			
+			//======================================================Функция div(/)======================
+			else if(Lines.get(line_num).split("\\s+")[0].equals("div")||Lines.get(line_num).split("\\s+")[0].equals("/")){
+				if(!Lines.get(line_num).contains(":")){
+					System.out.println("SyntaxError: The symbol ':' must be in DIV. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				String First_Part = Lines.get(line_num).split(":")[0];
+				String Second_Part = Lines.get(line_num).split(":")[1];
+				if(First_Part.split("\\s+").length!=2){
+					System.out.println("SyntaxError: The add function should return a value of some single variable. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				
+					
+				if(Second_Part.split("\\s+").length<2){
+					System.out.println("ParameterError: The function must take at least two variables. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				//Существует ли переменная
+				if(!String_Names.contains(First_Part.split("\\s+")[1])&&!Int_Names.contains(First_Part.split("\\s+")[1])&&
+				!Real_Names.contains(First_Part.split("\\s+")[1])&&!Bool_Names.contains(First_Part.split("\\s+")[1])){
+					System.out.println("NameError: Variable does not exist - \'"+First_Part.split("\\s+")[1]
+						+"\'. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				//Является ли она булевой
+				if(Bool_Names.contains(First_Part.split("\\s+")[1])){
+					System.out.println("TypeError: The DIV operation is not applicable to Boolean variables. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				//Является ли она строковой
+				if(String_Names.contains(First_Part.split("\\s+")[1])){
+					System.out.println("TypeError: The DIV operation is not applicable to String variables. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				String All_Type = "";
+				int Int_Result = 0;
+				double Real_Result = 0.0;
+				if(Int_Names.contains(First_Part.split("\\s+")[1])){
+					All_Type = "int";
+					Int_Result = Int_Variables.get(Int_Names.indexOf(Second_Part.split("\\s+")[0]));
+				}else if(Real_Names.contains(First_Part.split("\\s+")[1])){
+					All_Type = "real";
+					Real_Result = Real_Variables.get(Real_Names.indexOf(Second_Part.split("\\s+")[0]));
+				}
+				
+				for(int i=1;i<Second_Part.split("\\s+").length;i++){
+					String Cur_Type = "";
+					if(Int_Names.contains(Second_Part.split("\\s+")[i])){
+						Cur_Type = "int";
+					}else if(Real_Names.contains(Second_Part.split("\\s+")[i])){
+						Cur_Type = "real";
+					}else{
+						if(Bool_Names.contains(Second_Part.split("\\s+")[i])){
+							System.out.println("TypeError: The DIV operation is not applicable to Boolean variables. Line "+Integer.toString(line_num+1));
+							System.exit(1);
+						}
+						else if(String_Names.contains(Second_Part.split("\\s+")[i])){
+							System.out.println("TypeError: The DIV operation is not applicable to String variables. Line "+Integer.toString(line_num+1));
+							System.exit(1);
+						}else{
+							System.out.println("NameError: Variable does not exist - \'"+Second_Part.split("\\s+")[i]
+							+"\'. Line "+Integer.toString(line_num+1));
+							System.exit(1);
+						}
+					}
+					if(!All_Type.equals(Cur_Type)){
+						System.out.println("TypeError: Incompatible data types. Line "+Integer.toString(line_num+1));
+						System.exit(1);
+					}
+					if(All_Type.equals("int")){
+						Int_Result /= Int_Variables.get(Int_Names.indexOf(Second_Part.split("\\s+")[i]));
+					}else if(All_Type.equals("real")){
+						Real_Result /= Real_Variables.get(Real_Names.indexOf(Second_Part.split("\\s+")[i]));
+					}
+				}
+				if(!First_Part.split("\\s+")[1].equals("nil")){
+					if(All_Type.equals("int")){
+						Int_Variables.set(Int_Names.indexOf(First_Part.split("\\s+")[1]),Int_Result);
+					}else if(All_Type.equals("real")){
+						Real_Variables.set(Real_Names.indexOf(First_Part.split("\\s+")[1]),Real_Result);
+					}
+				}
+			}
+			
+			//==============================mod============================================
+			else if(Lines.get(line_num).split("\\s+")[0].equals("mod")||Lines.get(line_num).split("\\s+")[0].equals("%")){
+				if(!Lines.get(line_num).contains(":")){
+					System.out.println("SyntaxError: The symbol ':' must be in MOD. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				String First_Part = Lines.get(line_num).split(":")[0];
+				String Second_Part = Lines.get(line_num).split(":")[1];
+				if(First_Part.split("\\s+").length!=2){
+					System.out.println("SyntaxError: The add function should return a value of some single variable. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				
+					
+				if(Second_Part.split("\\s+").length<2){
+					System.out.println("ParameterError: The function must take at least two variables. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				//Существует ли переменная
+				if(!String_Names.contains(First_Part.split("\\s+")[1])&&!Int_Names.contains(First_Part.split("\\s+")[1])&&
+				!Real_Names.contains(First_Part.split("\\s+")[1])&&!Bool_Names.contains(First_Part.split("\\s+")[1])){
+					System.out.println("NameError: Variable does not exist - \'"+First_Part.split("\\s+")[1]
+						+"\'. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				//Является ли она булевой
+				if(Bool_Names.contains(First_Part.split("\\s+")[1])){
+					System.out.println("TypeError: The MOD operation is not applicable to Boolean variables. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				//Является ли она строковой
+				if(String_Names.contains(First_Part.split("\\s+")[1])){
+					System.out.println("TypeError: The MOD operation is not applicable to String variables. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				if(Second_Part.split("\\s+").length!=2){
+					System.out.println("ParameterError: The MOD operation takes only two parameters. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				String All_Type = "";
+				int Int_Result = 0;
+				double Real_Result = 0.0;
+				if(Int_Names.contains(First_Part.split("\\s+")[1])){
+					All_Type = "int";
+					Int_Result = Int_Variables.get(Int_Names.indexOf(Second_Part.split("\\s+")[0]));
+				}else if(Real_Names.contains(First_Part.split("\\s+")[1])){
+					All_Type = "real";
+					Real_Result = Real_Variables.get(Real_Names.indexOf(Second_Part.split("\\s+")[0]));
+				}
+				
+					String Cur_Type = "";
+					if(Int_Names.contains(Second_Part.split("\\s+")[1])){
+						Cur_Type = "int";
+					}else if(Real_Names.contains(Second_Part.split("\\s+")[1])){
+						Cur_Type = "real";
+					}else{
+						if(Bool_Names.contains(Second_Part.split("\\s+")[1])){
+							System.out.println("TypeError: The DIV operation is not applicable to Boolean variables. Line "+Integer.toString(line_num+1));
+							System.exit(1);
+						}
+						else if(String_Names.contains(Second_Part.split("\\s+")[1])){
+							System.out.println("TypeError: The DIV operation is not applicable to String variables. Line "+Integer.toString(line_num+1));
+							System.exit(1);
+						}else{
+							System.out.println("NameError: Variable does not exist - \'"+Second_Part.split("\\s+")[1]
+							+"\'. Line "+Integer.toString(line_num+1));
+							System.exit(1);
+						}
+					}
+					if(!All_Type.equals(Cur_Type)){
+						System.out.println("TypeError: Incompatible data types. Line "+Integer.toString(line_num+1));
+						System.exit(1);
+					}
+					if(All_Type.equals("int")){
+						Int_Result %= Int_Variables.get(Int_Names.indexOf(Second_Part.split("\\s+")[1]));
+					}else if(All_Type.equals("real")){
+						Real_Result %= Real_Variables.get(Real_Names.indexOf(Second_Part.split("\\s+")[1]));
+					}
+				if(!First_Part.split("\\s+")[1].equals("nil")){
+					if(All_Type.equals("int")){
+						Int_Variables.set(Int_Names.indexOf(First_Part.split("\\s+")[1]),Int_Result);
+					}else if(All_Type.equals("real")){
+						Real_Variables.set(Real_Names.indexOf(First_Part.split("\\s+")[1]),Real_Result);
+					}
+				}
+			//=======================================================================================Mod
 			
 			//Если имя функции неправильное, то...
 			}else{
