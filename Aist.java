@@ -29,7 +29,7 @@ public class Aist{
 	static List<String> Bool_Names = new ArrayList<String>();
 	
 	//Операторы Aist
-	static final String[] Aist_opeators = new String[]{"var","variable","int","integer","str","string","real","set","print","println","add","nil"};
+	static final String[] Aist_opeators = new String[]{"var","variable","int","integer","str","string","real","set","print","println","add","nil","+"};
 	
 	//Отпарсить строку
 	static String Aist_ParseString(String s){
@@ -395,64 +395,66 @@ public class Aist{
 					System.out.println("SyntaxError: The add function should return a value of some single variable. Line "+Integer.toString(line_num+1));
 					System.exit(1);
 				}
-				if(!First_Part.split("\\s+")[1].equals("nil")){
-					if(Second_Part.split("\\s+").length<2){
-						System.out.println("ParameterError: The function must take at least two variables. Line "+Integer.toString(line_num+1));
-						System.exit(1);
-					}
-					//Существует ли переменная
-					if(!String_Names.contains(First_Part.split("\\s+")[1])&&!Int_Names.contains(First_Part.split("\\s+")[1])&&
-					!Real_Names.contains(First_Part.split("\\s+")[1])&&!Bool_Names.contains(First_Part.split("\\s+")[1])){
-						System.out.println("NameError: Variable does not exist - \'"+First_Part.split("\\s+")[1]
-							+"\'. Line "+Integer.toString(line_num+1));
-						System.exit(1);
-					}
-					//Является ли она булевой
-					if(Bool_Names.contains(First_Part.split("\\s+")[1])){
-						System.out.println("TypeError: The ADD operation is not applicable to Boolean variables. Line "+Integer.toString(line_num+1));
-						System.exit(1);
-					}
-					String All_Type = "";
-					if(String_Names.contains(First_Part.split("\\s+")[1])){
-						All_Type = "str";
-					}else if(Int_Names.contains(First_Part.split("\\s+")[1])){
-						All_Type = "int";
-					}else if(Real_Names.contains(First_Part.split("\\s+")[1])){
-						All_Type = "real";
-					}
-					String String_Result = "";
-					int Int_Result = 0;
-					double Real_Result = 0.0;
-					for(int i=0;i<Second_Part.split("\\s+").length;i++){
-						String Cur_Type = "";
-						if(String_Names.contains(Second_Part.split("\\s+")[i])){
-							Cur_Type = "str";
-						}else if(Int_Names.contains(Second_Part.split("\\s+")[i])){
-							Cur_Type = "int";
-						}else if(Real_Names.contains(Second_Part.split("\\s+")[i])){
-							Cur_Type = "real";
+				
+					
+				if(Second_Part.split("\\s+").length<2){
+					System.out.println("ParameterError: The function must take at least two variables. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				//Существует ли переменная
+				if(!String_Names.contains(First_Part.split("\\s+")[1])&&!Int_Names.contains(First_Part.split("\\s+")[1])&&
+				!Real_Names.contains(First_Part.split("\\s+")[1])&&!Bool_Names.contains(First_Part.split("\\s+")[1])){
+					System.out.println("NameError: Variable does not exist - \'"+First_Part.split("\\s+")[1]
+						+"\'. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				//Является ли она булевой
+				if(Bool_Names.contains(First_Part.split("\\s+")[1])){
+					System.out.println("TypeError: The ADD operation is not applicable to Boolean variables. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				String All_Type = "";
+				if(String_Names.contains(First_Part.split("\\s+")[1])){
+					All_Type = "str";
+				}else if(Int_Names.contains(First_Part.split("\\s+")[1])){
+					All_Type = "int";
+				}else if(Real_Names.contains(First_Part.split("\\s+")[1])){
+					All_Type = "real";
+				}
+				String String_Result = "";
+				int Int_Result = 0;
+				double Real_Result = 0.0;
+				for(int i=0;i<Second_Part.split("\\s+").length;i++){
+					String Cur_Type = "";
+					if(String_Names.contains(Second_Part.split("\\s+")[i])){
+						Cur_Type = "str";
+					}else if(Int_Names.contains(Second_Part.split("\\s+")[i])){
+						Cur_Type = "int";
+					}else if(Real_Names.contains(Second_Part.split("\\s+")[i])){
+						Cur_Type = "real";
+					}else{
+						if(Bool_Names.contains(Second_Part.split("\\s+")[i])){
+							System.out.println("TypeError: The ADD operation is not applicable to Boolean variables. Line "+Integer.toString(line_num+1));
+							System.exit(1);
 						}else{
-							if(Bool_Names.contains(Second_Part.split("\\s+")[i])){
-								System.out.println("TypeError: The ADD operation is not applicable to Boolean variables. Line "+Integer.toString(line_num+1));
-								System.exit(1);
-							}else{
-								System.out.println("NameError: Variable does not exist - \'"+Second_Part.split("\\s+")[i]
-								+"\'. Line "+Integer.toString(line_num+1));
-								System.exit(1);
-							}
-						}
-						if(!All_Type.equals(Cur_Type)){
-							System.out.println("TypeError: Incompatible data types. Line "+Integer.toString(line_num+1));
+							System.out.println("NameError: Variable does not exist - \'"+Second_Part.split("\\s+")[i]
+							+"\'. Line "+Integer.toString(line_num+1));
 							System.exit(1);
 						}
-						if(All_Type.equals("str")){
-							String_Result += String_Variables.get(String_Names.indexOf(Second_Part.split("\\s+")[i]));
-						}else if(All_Type.equals("int")){
-							Int_Result += Int_Variables.get(Int_Names.indexOf(Second_Part.split("\\s+")[i]));
-						}else if(All_Type.equals("real")){
-							Real_Result += Real_Variables.get(Real_Names.indexOf(Second_Part.split("\\s+")[i]));
-						}
 					}
+					if(!All_Type.equals(Cur_Type)){
+						System.out.println("TypeError: Incompatible data types. Line "+Integer.toString(line_num+1));
+						System.exit(1);
+					}
+					if(All_Type.equals("str")){
+						String_Result += String_Variables.get(String_Names.indexOf(Second_Part.split("\\s+")[i]));
+					}else if(All_Type.equals("int")){
+						Int_Result += Int_Variables.get(Int_Names.indexOf(Second_Part.split("\\s+")[i]));
+					}else if(All_Type.equals("real")){
+						Real_Result += Real_Variables.get(Real_Names.indexOf(Second_Part.split("\\s+")[i]));
+					}
+				}
+				if(!First_Part.split("\\s+")[1].equals("nil")){
 					if(All_Type.equals("str")){
 						String_Variables.set(String_Names.indexOf(First_Part.split("\\s+")[1]),String_Result);
 					}else if(All_Type.equals("int")){

@@ -1,5 +1,6 @@
-variable int Hello
-set Hello=2
-add Hello:Hello Hello
-print Hello
+variable int num1
+variable int num2
+scan num1 num2
+add num1:num1 num2
+print num1
 scan
