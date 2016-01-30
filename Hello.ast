@@ -1,6 +1,5 @@
-variable int num1
-variable int num2
-scan num1 num2
-mul num1:num1 num2
-print num1
-scan
+var string Hello
+set Hello=Hello 
+-Hellow
+print Hello
+goto Hellow

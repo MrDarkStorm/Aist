@@ -6,10 +6,11 @@
 import java.io.*;
 import java.util.*;
 import java.math.*;
+import java.util.regex.*;
 
 public class Aist{
 	
-	static int line_num;
+	static int line_num = 0;
 	
 	//Список значений строковых переменных
 	static List<String> String_Variables = new ArrayList<String>();
@@ -27,6 +28,10 @@ public class Aist{
 	static List<Boolean> Bool_Variables = new ArrayList<Boolean>();
 	//Список имён булевых переменных
 	static List<String> Bool_Names = new ArrayList<String>();
+	//Список меток
+	static List<String> Goto_Label_Names = new ArrayList<String>();
+	//Список позиций меток
+	static List<Integer> Goto_Label_Places = new ArrayList<Integer>();
 	
 	//Операторы Aist
 	static final String[] Aist_opeators = new String[]{"var","variable","int","integer","str","string","real","set","print","println","add","nil","+","sub",
@@ -119,8 +124,18 @@ public class Aist{
 		//Проверяем, всё ли в порядке с файлом. Если да - то считываем данные в файл
 		try(BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(args[0]),"UTF-8"))){
 			String s;
+			int cur_line = 0;
 			while((s=br.readLine())!=null){
-				Lines.add(s.replaceAll("^\\s+", ""));
+				cur_line++;
+				Pattern p = Pattern.compile("^-.+$");
+				Matcher m = p.matcher(s.trim());
+				//Если строка - goto метка, то...
+				if(m.matches()){
+					String Label_Name = s.trim().substring(1,s.trim().length());
+					Goto_Label_Names.add(Label_Name);
+					Goto_Label_Places.add(cur_line);
+				}
+				Lines.add(s.replaceAll("^\\s+", ""));	
 			}
 		}catch(Exception e){
 			System.out.println("OpeningFileError: Cannot open file - no access To it or it does not exist");
@@ -128,7 +143,7 @@ public class Aist{
 		}
 		
 		//Реализация интерпретации комманд
-		for(line_num=0;line_num<Lines.size();line_num++){
+		while(line_num<Lines.size()){
 			if(Lines.get(line_num).trim().equals("")) continue;
 			if(Lines.get(line_num).charAt(0)==';') continue;
 			
@@ -808,14 +823,38 @@ public class Aist{
 						Real_Variables.set(Real_Names.indexOf(First_Part.split("\\s+")[1]),Real_Result);
 					}
 				}
+			}
 			//=======================================================================================Mod
-			
+			//================GOTO===================
+			else if(Lines.get(line_num).split("\\s+")[0].equals("goto")){
+				if(Lines.get(line_num).split("\\s+").length!=2){
+					System.out.println("ParameterError: The GOTO operation takes only one parameter. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
+				String Goto_Label = Lines.get(line_num).split("\\s+")[1];
+				int Goto_Place = Goto_Label_Places.get(Goto_Label_Names.indexOf(Goto_Label));
+				if(!Goto_Label_Names.contains(Goto_Label)){
+					System.out.println("LabelError: Label does not exists - \'"+Goto_Label+"Line "+Integer.toString(line_num));
+					System.exit(1);
+				}
+				line_num = Goto_Place-1;
+			}
+			//=======================================
 			//Если имя функции неправильное, то...
-			}else{
-				System.out.println("SyntaxError: Unknown function - \'"+Lines.get(line_num).split("\\s+")[0]+"\'. Line "+Integer.toString(line_num+1));
-				System.exit(1);
+			else{
+				Pattern p = Pattern.compile("^-.+$");
+				Matcher m = p.matcher(Lines.get(line_num).trim());
+				//Если строка - goto метка, то...
+				if(!m.matches()){
+					System.out.println("SyntaxError: Unknown function - \'"+Lines.get(line_num).split("\\s+")[0]+"\'. Line "+Integer.toString(line_num+1));
+					System.exit(1);
+				}
 			}
 			//==============================
+			
+			
+			//Конец цикла
+			line_num++;
 		}
     }
 }
