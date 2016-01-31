@@ -132,6 +132,10 @@ public class Aist{
 				//Если строка - goto метка, то...
 				if(m.matches()){
 					String Label_Name = s.trim().substring(1,s.trim().length());
+					if(Goto_Label_Names.contains(Label_Name)){
+						System.out.println("LabelError: The Label is already exists - \'"+Label_Name+"\'. Line "+Integer.toString(cur_line));
+						System.exit(1);
+					}
 					Goto_Label_Names.add(Label_Name);
 					Goto_Label_Places.add(cur_line);
 				}
@@ -844,7 +848,7 @@ public class Aist{
 			else{
 				Pattern p = Pattern.compile("^-.+$");
 				Matcher m = p.matcher(Lines.get(line_num).trim());
-				//Если строка - goto метка, то...
+				//Если строка - не goto метка, то...
 				if(!m.matches()){
 					System.out.println("SyntaxError: Unknown function - \'"+Lines.get(line_num).split("\\s+")[0]+"\'. Line "+Integer.toString(line_num+1));
 					System.exit(1);
